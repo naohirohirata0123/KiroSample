@@ -1,0 +1,71 @@
+<div class="container portal-container">
+  <h1>🌟 ポータル 🌟</h1>
+  <p style="color: #666; font-size: 18px;">見たいページを選んでください</p>
+  <div class="menu">
+    <a href="/date" class="menu-item date">
+      <div class="icon">📅</div>
+      <div>今日の日付</div>
+    </a>
+    <a href="/horoscope" class="menu-item horoscope">
+      <div class="icon">⭐</div>
+      <div>星座占い</div>
+    </a>
+    <a href="/quote" class="menu-item quote">
+      <div class="icon">💭</div>
+      <div>偉人の名言</div>
+    </a>
+  </div>
+</div>
+
+<style>
+  .portal-container {
+    padding: 50px;
+    max-width: 800px;
+  }
+  
+  h1 {
+    font-size: 36px;
+    margin: 0 0 40px 0;
+  }
+  
+  .menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+  }
+  
+  .menu-item {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 30px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .menu-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  }
+  
+  .menu-item.date {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  
+  .menu-item.horoscope {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  }
+  
+  .menu-item.quote {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  }
+  
+  .icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+  }
+</style>

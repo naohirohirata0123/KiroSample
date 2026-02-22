@@ -1,16 +1,20 @@
 {
-  "name": "my-nodejs-project",
+  "name": "kiro-sample",
   "version": "1.0.0",
-  "description": "A new Node.js project",
+  "description": "日付、星座占い、偉人の名言を表示するWebアプリケーション",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js"
+    "dev": "nodemon index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["express", "web-app", "horoscope", "quotes"],
+  "author": "naohirohirata0123",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.1.9",
     "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

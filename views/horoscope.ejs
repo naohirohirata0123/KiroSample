@@ -1,0 +1,35 @@
+<div class="container">
+  <h1>今日の星座占い</h1>
+  <div class="sign"><%= horoscope.sign %></div>
+  <div class="fortune"><%= horoscope.fortune %></div>
+  <div class="lucky"><%= horoscope.lucky %></div>
+  <div class="nav">
+    <a href="/">ホーム</a>
+    <a href="/date">今日の日付</a>
+    <a href="/quote">偉人の名言</a>
+  </div>
+</div>
+
+<style>
+  .container {
+    max-width: 500px;
+  }
+  
+  .sign {
+    font-size: 32px;
+    color: #f5576c;
+    margin: 20px 0;
+  }
+  
+  .fortune {
+    font-size: 18px;
+    color: #555;
+    margin: 15px 0;
+  }
+  
+  .lucky {
+    font-size: 16px;
+    color: #888;
+    margin: 10px 0;
+  }
+</style>
