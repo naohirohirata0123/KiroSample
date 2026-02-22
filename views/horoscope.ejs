@@ -1,8 +1,24 @@
-<div class="container">
+<div class="container horoscope-container">
+  <div class="horoscope-icon">⭐</div>
   <h1>今日の星座占い</h1>
-  <div class="sign"><%= horoscope.sign %></div>
-  <div class="fortune"><%= horoscope.fortune %></div>
-  <div class="lucky"><%= horoscope.lucky %></div>
+  
+  <div class="selector">
+    <label for="zodiac-select">星座を選択</label>
+    <select id="zodiac-select">
+      <option value="">今日の運勢</option>
+      <% allHoroscopes.forEach((h, i) => { %>
+        <option value="<%= i %>" <%= selectedIndex == i ? 'selected' : '' %>><%= h.sign %></option>
+      <% }); %>
+    </select>
+  </div>
+  
+  <div class="horoscope-card">
+    <div class="sign"><%= horoscope.sign %></div>
+    <div class="fortune-label">今日の運勢</div>
+    <div class="fortune"><%= horoscope.fortune %></div>
+    <div class="lucky"><%= horoscope.lucky %></div>
+  </div>
+  
   <div class="nav">
     <a href="/">ホーム</a>
     <a href="/date">今日の日付</a>
@@ -10,26 +26,111 @@
   </div>
 </div>
 
+<script>
+  document.getElementById('zodiac-select').addEventListener('change', function() {
+    window.location.href = '/horoscope?sign=' + this.value;
+  });
+</script>
+
 <style>
-  .container {
-    max-width: 500px;
+  .horoscope-container {
+    max-width: 600px;
+  }
+  
+  .horoscope-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+  
+  .selector {
+    margin: 30px 0;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .selector label {
+    display: block;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  .selector select {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 2px solid #f5576c;
+    border-radius: 25px;
+    background: white;
+    cursor: pointer;
+    min-width: 200px;
+    transition: all 0.3s;
+    box-shadow: 0 4px 10px rgba(245, 87, 108, 0.2);
+    position: relative;
+    z-index: 10;
+    appearance: auto;
+    -webkit-appearance: menulist;
+    -moz-appearance: menulist;
+  }
+  
+  .selector select:hover {
+    border-color: #f093fb;
+    box-shadow: 0 6px 15px rgba(245, 87, 108, 0.3);
+  }
+  
+  .selector select:focus {
+    outline: none;
+    border-color: #f093fb;
+    box-shadow: 0 0 0 3px rgba(245, 87, 108, 0.2);
+  }
+  
+  .horoscope-card {
+    background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
+    padding: 40px;
+    border-radius: 20px;
+    margin: 30px 0;
+    border: 2px solid rgba(245, 87, 108, 0.3);
+    box-shadow: 0 10px 30px rgba(245, 87, 108, 0.2);
+    position: relative;
+    z-index: 1;
   }
   
   .sign {
-    font-size: 32px;
+    font-size: 42px;
     color: #f5576c;
-    margin: 20px 0;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  
+  .fortune-label {
+    font-size: 14px;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
   }
   
   .fortune {
-    font-size: 18px;
+    font-size: 20px;
     color: #555;
-    margin: 15px 0;
+    margin: 20px 0;
+    line-height: 1.8;
+    font-weight: 500;
   }
   
   .lucky {
     font-size: 16px;
     color: #888;
-    margin: 10px 0;
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    font-weight: 600;
   }
 </style>

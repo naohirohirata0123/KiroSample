@@ -73,7 +73,15 @@ app.get('/date', async (req, res) => {
 app.get('/horoscope', async (req, res) => {
   try {
     const today = new Date();
-    const index = today.getDate() % horoscopes.length;
+    const signParam = req.query.sign;
+    
+    let index;
+    if (signParam !== undefined && signParam !== '') {
+      index = parseInt(signParam);
+    } else {
+      index = today.getDate() % horoscopes.length;
+    }
+    
     const todayHoroscope = horoscopes[index];
     
     const html = await renderWithLayout('horoscope', {
@@ -81,7 +89,9 @@ app.get('/horoscope', async (req, res) => {
       background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       navColor: '#f5576c',
       customStyle: '',
-      horoscope: todayHoroscope
+      horoscope: todayHoroscope,
+      allHoroscopes: horoscopes,
+      selectedIndex: index
     });
     res.send(html);
   } catch (err) {
@@ -93,7 +103,15 @@ app.get('/horoscope', async (req, res) => {
 app.get('/quote', async (req, res) => {
   try {
     const today = new Date();
-    const index = today.getDate() % quotes.length;
+    const isRandom = req.query.random === 'true';
+    
+    let index;
+    if (isRandom) {
+      index = Math.floor(Math.random() * quotes.length);
+    } else {
+      index = today.getDate() % quotes.length;
+    }
+    
     const todayQuote = quotes[index];
     
     const html = await renderWithLayout('quote', {

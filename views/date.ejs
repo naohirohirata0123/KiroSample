@@ -1,9 +1,44 @@
-<div class="container">
+<div class="container date-container">
+  <div class="date-icon">📅</div>
   <h1>今日の日付</h1>
-  <p style="font-size: 24px; color: #667eea;"><%= dateString %></p>
+  <div class="date-display">
+    <div class="date-main"><%= dateString %></div>
+  </div>
   <div class="nav">
     <a href="/">ホーム</a>
     <a href="/horoscope">星座占い</a>
     <a href="/quote">偉人の名言</a>
   </div>
 </div>
+
+<style>
+  .date-container {
+    max-width: 600px;
+  }
+  
+  .date-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .date-display {
+    margin: 30px 0;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    border-radius: 15px;
+    border: 2px solid rgba(102, 126, 234, 0.3);
+  }
+  
+  .date-main {
+    font-size: 28px;
+    color: #667eea;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+</style>

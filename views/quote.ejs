@@ -1,7 +1,18 @@
-<div class="container">
+<div class="container quote-container">
+  <div class="quote-icon">💭</div>
   <h1>偉人の名言</h1>
-  <div class="quote">"<%= quote.quote %>"</div>
-  <div class="author">- <%= quote.author %></div>
+  
+  <div class="quote-card">
+    <div class="quote-mark">"</div>
+    <div class="quote"><%= quote.quote %></div>
+    <div class="author">— <%= quote.author %></div>
+  </div>
+  
+  <button class="random-btn" id="randomBtn">
+    <span class="btn-icon">🔄</span>
+    <span>別の名言を見る</span>
+  </button>
+  
   <div class="nav">
     <a href="/">ホーム</a>
     <a href="/date">今日の日付</a>
@@ -9,23 +20,112 @@
   </div>
 </div>
 
+<script>
+  document.getElementById('randomBtn').addEventListener('click', function() {
+    window.location.href = '/quote?random=true';
+  });
+</script>
+
 <style>
-  .container {
-    max-width: 600px;
+  .quote-container {
+    max-width: 700px;
+  }
+  
+  .quote-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+  
+  .quote-card {
+    background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+    padding: 50px 40px;
+    border-radius: 20px;
+    margin: 30px 0;
+    border: 2px solid rgba(79, 172, 254, 0.3);
+    box-shadow: 0 10px 30px rgba(79, 172, 254, 0.2);
+    position: relative;
+    z-index: 1;
+  }
+  
+  .quote-mark {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 80px;
+    color: rgba(79, 172, 254, 0.2);
+    font-family: Georgia, serif;
+    line-height: 1;
   }
   
   .quote {
-    font-size: 24px;
-    color: #555;
+    font-size: 26px;
+    color: #444;
     font-style: italic;
     margin: 20px 0;
-    line-height: 1.6;
+    line-height: 1.8;
+    font-weight: 500;
+    position: relative;
+    z-index: 1;
   }
   
   .author {
-    font-size: 18px;
+    font-size: 20px;
     color: #00f2fe;
-    margin: 20px 0;
-    font-weight: bold;
+    margin-top: 30px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  .random-btn {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    margin: 30px 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(79, 172, 254, 0.3);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 10;
+  }
+  
+  .random-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(79, 172, 254, 0.4);
+  }
+  
+  .random-btn:active {
+    transform: translateY(-1px);
+  }
+  
+  .random-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.3);
+  }
+  
+  .btn-icon {
+    font-size: 20px;
+    display: inline-block;
+  }
+  
+  .random-btn:hover .btn-icon {
+    animation: rotate-icon 0.5s ease-in-out;
+  }
+  
+  @keyframes rotate-icon {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 </style>
