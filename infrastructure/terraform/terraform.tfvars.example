@@ -1,0 +1,21 @@
+# AWS設定
+aws_region = "ap-northeast-1"
+environment = "production"
+project_name = "kirosample"
+
+# ネットワーク設定
+vpc_cidr = "10.0.0.0/16"
+availability_zones = ["ap-northeast-1a", "ap-northeast-1c"]
+
+# コンテナ設定
+container_image = "123456789012.dkr.ecr.ap-northeast-1.amazonaws.com/kirosample:latest"
+container_port = 3000
+
+# Fargate設定
+task_cpu = "256"
+task_memory = "512"
+
+# スケーリング設定
+desired_count = 2
+min_capacity = 2
+max_capacity = 10

@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path');
 const ejs = require('ejs');
-const horoscopes = require('./data/horoscopes');
-const quotes = require('./data/quotes');
+const horoscopes = require('../data/horoscopes');
+const quotes = require('../data/quotes');
 
 const app = express();
 const port = 3000;
