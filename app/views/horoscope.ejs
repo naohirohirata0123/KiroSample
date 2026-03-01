@@ -17,6 +17,11 @@
     <div class="fortune-label">今日の運勢</div>
     <div class="fortune"><%= horoscope.fortune %></div>
     <div class="lucky"><%= horoscope.lucky %></div>
+    
+    <button class="favorite-btn" id="favoriteBtn">
+      <span class="btn-icon">❤️</span>
+      <span>お気に入りに追加</span>
+    </button>
   </div>
   
   <div class="nav">
@@ -29,6 +34,40 @@
 <script>
   document.getElementById('zodiac-select').addEventListener('change', function() {
     window.location.href = '/horoscope?sign=' + this.value;
+  });
+  
+  document.getElementById('favoriteBtn').addEventListener('click', async function() {
+    const btn = this;
+    btn.disabled = true;
+    
+    try {
+      const response = await fetch('/api/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: 'horoscope',
+          content: '<%= horoscope.sign %>: <%= horoscope.fortune %>',
+          author: '<%= horoscope.lucky %>'
+        })
+      });
+      
+      if (response.ok) {
+        btn.innerHTML = '<span class="btn-icon">✅</span><span>追加しました！</span>';
+        setTimeout(() => {
+          btn.innerHTML = '<span class="btn-icon">❤️</span><span>お気に入りに追加</span>';
+          btn.disabled = false;
+        }, 2000);
+      } else {
+        alert('追加に失敗しました');
+        btn.disabled = false;
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('追加に失敗しました');
+      btn.disabled = false;
+    }
   });
 </script>
 
@@ -132,5 +171,36 @@
     background: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
     font-weight: 600;
+  }
+  
+  .favorite-btn {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: white;
+    border: none;
+    padding: 15px 35px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(250, 112, 154, 0.3);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .favorite-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(250, 112, 154, 0.4);
+  }
+  
+  .favorite-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .btn-icon {
+    font-size: 20px;
   }
 </style>

@@ -7,6 +7,11 @@
 - 📅 今日の日付表示
 - ⭐ 星座占い（日替わり・選択可能）
 - 💭 偉人の名言（日替わり・ランダム表示）
+- ❤️ お気に入り機能（データベース連携）
+  - 名言・星座占いをお気に入りに追加
+  - お気に入り一覧表示
+  - 統計情報表示
+  - タイプ別フィルタリング
 
 ## プロジェクト構造
 
@@ -37,19 +42,29 @@ kirosample/
 
 ## クイックスタート
 
-### ローカル開発
+### ローカル開発（ホットリロード付き）
 
 ```bash
-# Dockerを使用
-docker-compose up --build
+# 開発モード（コード変更が自動反映）
+docker-compose -f docker-compose.dev.yml up --build
 
-# または直接実行
-cd app
-npm install
-npm start
+# または本番モード
+docker-compose up --build
 ```
 
 http://localhost:3000 でアクセス
+
+### データベース
+
+PostgreSQL 15を使用。初回起動時に自動的にテーブルが作成されます。
+
+```bash
+# データベースに直接接続
+docker-compose exec db psql -U kirosample -d kirosample
+
+# お気に入りテーブルの確認
+docker-compose exec db psql -U kirosample -d kirosample -c "SELECT * FROM favorites;"
+```
 
 ### AWSへのデプロイ
 
@@ -71,12 +86,15 @@ git push origin main
 - Node.js 18
 - Express 4.18
 - EJS 3.1
+- PostgreSQL 15
+- node-postgres (pg) 8.11
 - Docker
 
 ### インフラストラクチャ
 - AWS ECS Fargate
 - Application Load Balancer
 - Amazon ECR
+- Amazon RDS (PostgreSQL) ※本番環境推奨
 - CloudWatch Logs
 - Terraform
 - GitHub Actions

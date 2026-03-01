@@ -76,20 +76,49 @@
 - リクエスト数
 - レスポンスタイム
 
-### 6. データベース (将来)
+### 6. データベース層
 
-#### RDS / Aurora
+#### ローカル開発
+- PostgreSQL 15 (Docker)
+- docker-composeで自動起動
+- 開発・テスト用
+
+#### 本番環境（推奨）
+- Amazon RDS for PostgreSQL
+- または Aurora PostgreSQL
 - プライベートサブネットに配置
 - マルチAZ構成
 - 自動バックアップ
+- 暗号化
+
+#### テーブル構成
+```sql
+favorites (
+  id: SERIAL PRIMARY KEY,
+  type: VARCHAR(20),      -- 'quote' or 'horoscope'
+  content: TEXT,
+  author: VARCHAR(255),
+  created_at: TIMESTAMP,
+  likes: INTEGER
+)
+```
 
 ## トラフィックフロー
 
+### 通常のページ表示
 1. ユーザー → Route 53
 2. Route 53 → ALB (Public Subnet)
 3. ALB → ECS Tasks (Private Subnet)
 4. ECS Tasks → アプリケーション処理
-5. ECS Tasks → (将来) RDS
+5. ECS Tasks → レスポンス返却
+
+### お気に入り機能
+1. ユーザー → Route 53
+2. Route 53 → ALB (Public Subnet)
+3. ALB → ECS Tasks (Private Subnet)
+4. ECS Tasks → RDS/Aurora (Private Subnet)
+5. RDS/Aurora → データ取得/保存
+6. ECS Tasks → レスポンス返却
 
 ## セキュリティ
 
@@ -103,8 +132,8 @@
 - Inbound: 3000 from ALB Security Group
 - Outbound: 443 to Internet (for ECR pull)
 
-#### RDS Security Group (将来)
-- Inbound: 5432/3306 from ECS Security Group
+#### RDS Security Group
+- Inbound: 5432 (PostgreSQL) from ECS Security Group
 - Outbound: なし
 
 ## スケーリング
@@ -133,8 +162,10 @@
 ### データベース追加時
 | サービス | 仕様 | 月額 |
 |---------|------|------|
+| RDS PostgreSQL | db.t3.micro (マルチAZ) | $30 |
 | Aurora Serverless v2 | 0.5-2 ACU | $30-120 |
-| **合計** | | **$112-202/月** |
+| **合計（RDS使用時）** | | **$112/月** |
+| **合計（Aurora使用時）** | | **$112-202/月** |
 
 ## 次のステップ
 

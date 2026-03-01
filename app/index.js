@@ -1,11 +1,16 @@
 const express = require('express');
 const path = require('path');
 const ejs = require('ejs');
-const horoscopes = require('../data/horoscopes');
-const quotes = require('../data/quotes');
+const horoscopes = require('./data/horoscopes');
+const quotes = require('./data/quotes');
+const db = require('./db');
 
 const app = express();
 const port = 3000;
+
+// ミドルウェア
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // ビューエンジンの設定
 app.set('view engine', 'ejs');
@@ -127,7 +132,59 @@ app.get('/quote', async (req, res) => {
   }
 });
 
-// 404エラーハンドリング
+// お気に入り一覧画面
+app.get('/favorites', async (req, res) => {
+  try {
+    const type = req.query.type;
+    const favorites = await db.getFavorites(type);
+    const stats = await db.getStats();
+    
+    const html = await renderWithLayout('favorites', {
+      title: 'お気に入り一覧',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      navColor: '#667eea',
+      customStyle: '',
+      favorites,
+      stats,
+      selectedType: type || 'all'
+    });
+    res.send(html);
+  } catch (err) {
+    console.error('Error fetching favorites:', err);
+    res.status(500).send('エラーが発生しました');
+  }
+});
+
+// お気に入り追加API
+app.post('/api/favorites', async (req, res) => {
+  try {
+    const { type, content, author } = req.body;
+    
+    if (!type || !content) {
+      return res.status(400).json({ error: 'type and content are required' });
+    }
+    
+    const favorite = await db.addFavorite(type, content, author);
+    res.json({ success: true, favorite });
+  } catch (err) {
+    console.error('Error adding favorite:', err);
+    res.status(500).json({ error: 'Failed to add favorite' });
+  }
+});
+
+// お気に入り削除API
+app.delete('/api/favorites/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await db.deleteFavorite(id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting favorite:', err);
+    res.status(500).json({ error: 'Failed to delete favorite' });
+  }
+});
+
+// 404エラーハンドリング(最後に配置)
 app.use(async (req, res) => {
   try {
     const html = await renderWithLayout('404', {
@@ -142,6 +199,17 @@ app.use(async (req, res) => {
   }
 });
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`サーバーが起動しました: http://localhost:${port}`);
-});
+// データベース初期化とサーバー起動
+async function startServer() {
+  try {
+    await db.initDatabase();
+    app.listen(port, '0.0.0.0', () => {
+      console.log(`サーバーが起動しました: http://localhost:${port}`);
+    });
+  } catch (err) {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  }
+}
+
+startServer();

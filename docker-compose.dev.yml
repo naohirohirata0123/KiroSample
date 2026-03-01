@@ -1,17 +1,17 @@
-# Production/Testing Docker Compose Configuration
-# For development with hot-reload, use: docker-compose -f docker-compose.dev.yml up
-
 services:
   app:
     build: ./app
     ports:
       - "3000:3000"
+    volumes:
+      - ./app:/app
+      - /app/node_modules
     environment:
       - DATABASE_URL=postgresql://kirosample:password@db:5432/kirosample
-      - NODE_ENV=production
+      - NODE_ENV=development
     depends_on:
       - db
-    command: npm start
+    command: npm run dev
   
   db:
     image: postgres:15-alpine

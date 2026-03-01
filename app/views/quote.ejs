@@ -8,10 +8,17 @@
     <div class="author">— <%= quote.author %></div>
   </div>
   
-  <button class="random-btn" id="randomBtn">
-    <span class="btn-icon">🔄</span>
-    <span>別の名言を見る</span>
-  </button>
+  <div class="action-buttons">
+    <button class="random-btn" id="randomBtn">
+      <span class="btn-icon">🔄</span>
+      <span>別の名言を見る</span>
+    </button>
+    
+    <button class="favorite-btn" id="favoriteBtn">
+      <span class="btn-icon">❤️</span>
+      <span>お気に入りに追加</span>
+    </button>
+  </div>
   
   <div class="nav">
     <a href="/">ホーム</a>
@@ -23,6 +30,40 @@
 <script>
   document.getElementById('randomBtn').addEventListener('click', function() {
     window.location.href = '/quote?random=true';
+  });
+  
+  document.getElementById('favoriteBtn').addEventListener('click', async function() {
+    const btn = this;
+    btn.disabled = true;
+    
+    try {
+      const response = await fetch('/api/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: 'quote',
+          content: '<%= quote.quote %>',
+          author: '<%= quote.author %>'
+        })
+      });
+      
+      if (response.ok) {
+        btn.innerHTML = '<span class="btn-icon">✅</span><span>追加しました！</span>';
+        setTimeout(() => {
+          btn.innerHTML = '<span class="btn-icon">❤️</span><span>お気に入りに追加</span>';
+          btn.disabled = false;
+        }, 2000);
+      } else {
+        alert('追加に失敗しました');
+        btn.disabled = false;
+      }
+    } catch (err) {
+      console.error('Error:', err);
+      alert('追加に失敗しました');
+      btn.disabled = false;
+    }
   });
 </script>
 
@@ -82,7 +123,15 @@
     letter-spacing: 0.5px;
   }
   
-  .random-btn {
+  .action-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 30px 0;
+  }
+  
+  .random-btn, .favorite-btn {
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     color: white;
     border: none;

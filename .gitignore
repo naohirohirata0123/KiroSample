@@ -5,6 +5,9 @@ node_modules/
 npm-debug.log*
 .vscode/
 
+# Docker volumes
+db-data/
+
 # Terraform
 infrastructure/terraform/.terraform/
 infrastructure/terraform/*.tfstate

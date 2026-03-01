@@ -15,10 +15,12 @@ kirosample/                    # プロジェクトルート
 │   │   ├── date.ejs         # 日付画面
 │   │   ├── horoscope.ejs    # 星座占い画面
 │   │   ├── quote.ejs        # 名言画面
+│   │   ├── favorites.ejs    # お気に入り一覧画面
 │   │   └── 404.ejs          # エラー画面
 │   ├── public/               # 静的アセット
 │   │   └── css/
 │   │       └── common.css   # 共通スタイル
+│   ├── db.js                 # データベース層
 │   ├── index.js              # アプリケーションエントリーポイント
 │   ├── package.json          # Node.js依存関係
 │   ├── Dockerfile            # コンテナイメージ定義
@@ -50,7 +52,9 @@ kirosample/                    # プロジェクトルート
 │   ├── deployment-guide.md          # デプロイ手順
 │   └── project-structure.md         # このファイル
 │
-├── docker-compose.yml         # ローカル開発環境
+├── docker-compose.yml         # 本番/テスト環境
+├── docker-compose.dev.yml     # ローカル開発環境
+├── .env.example               # 環境変数テンプレート
 ├── .gitignore                 # Git除外設定
 └── README.md                  # プロジェクト概要
 ```
@@ -81,6 +85,7 @@ kirosample/                    # プロジェクトルート
 
 ### アプリケーション
 - `app/index.js` - Expressサーバー、ルーティング
+- `app/db.js` - データベース接続、CRUD操作
 - `app/data/*.js` - 静的データ（星座、名言）
 - `app/views/*.ejs` - HTMLテンプレート
 - `app/public/css/*.css` - スタイルシート
@@ -96,7 +101,8 @@ kirosample/                    # プロジェクトルート
 
 ```
 1. ローカル開発
-   app/ で開発 → docker-compose.yml でテスト
+   app/ で開発 → docker-compose.dev.yml でテスト（ホットリロード）
+   または docker-compose.yml で本番モードテスト
 
 2. コミット・プッシュ
    git push origin main
@@ -109,6 +115,31 @@ kirosample/                    # プロジェクトルート
    ECRにプッシュ
    ↓
    ECS Fargateにデプロイ
+```
+
+## データベース層
+
+### ローカル開発
+- PostgreSQL 15 (Docker)
+- docker-compose経由で自動起動
+- データは`db-data`ボリュームに永続化
+
+### 本番環境（推奨）
+- Amazon RDS for PostgreSQL
+- マルチAZ配置
+- 自動バックアップ
+- 暗号化
+
+### テーブル設計
+```sql
+favorites (
+  id: SERIAL PRIMARY KEY,
+  type: VARCHAR(20),      -- 'quote' or 'horoscope'
+  content: TEXT,
+  author: VARCHAR(255),
+  created_at: TIMESTAMP,
+  likes: INTEGER
+)
 ```
 
 ## 利点
